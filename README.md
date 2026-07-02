@@ -159,3 +159,10 @@ All contributions must include:
 * Issue Tracker: SEE ISSUES
 * Documentation: EXPLORE SOURCE CODE
 INFORMATION: THIS REPO CONTAINS FILES FROM THE OFFICIAL LINUX KERNEL
+
+## Project Status
+
+⚠️ Current Status: Experimental (Build unstable)
+
+This kernel is under active development and may not build successfully.
+Do not use in production environments.
