@@ -1,0 +1,80 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# AI subsystem configuration
+#
+
+menuconfig AI_SUBSYSTEM
+	bool "AI Subsystem Support"
+	depends on RUST
+	help
+	  Enable the AI subsystem — a kernel-level layer for managing,
+	  monitoring, and accelerating AI workloads. Provides process
+	  classification, memory optimisation, local model priority,
+	  and a bridge to both local (ollama, opencode) and cloud AI
+	  runtimes.
+
+if AI_SUBSYSTEM
+
+config AI_DEBUG
+	bool "AI subsystem debug output"
+	help
+	  Enables verbose debug logging from the AI subsystem.
+
+config AI_MEMORY_PRIORITY
+	bool "AI memory priority allocation"
+	default y
+	help
+	  When enabled, processes classified as AI workloads receive
+	  memory allocation priority, transparent huge-page hints,
+	  and reduced swap pressure.
+
+config AI_LOCAL_PRIORITY
+	bool "Prioritise local AI models"
+	default y
+	help
+	  Prefer locally-running AI models over cloud endpoints.
+	  The scheduler will adjust process nice values and CPU
+	  time for AI-classified tasks.
+
+config AI_CLOUD_ROUTING
+	bool "Cloud AI routing support"
+	default y
+	help
+	  Enable the cloud AI routing layer. Allows the AI manager
+	  daemon to transparently route inference requests to
+	  configured cloud endpoints.
+
+config AI_MANAGER_DAEMON
+	bool "AI manager daemon (userspace)"
+	default y
+	help
+	  Build the userspace AI manager daemon (ai-mgr) which
+	  communicates with the kernel module via ioctls and
+	  manages model lifecycle, tool integration, and cloud
+	  routing.
+
+config AI_OLLAMA_INTEGRATION
+	bool "Ollama integration"
+	depends on AI_MANAGER_DAEMON
+	default y
+	help
+	  Enable integration with locally-running Ollama instances.
+	  The AI manager will detect, monitor, and optimise Ollama
+	  inference processes.
+
+config AI_OPENCODE_INTEGRATION
+	bool "Opencode integration"
+	depends on AI_MANAGER_DAEMON
+	default y
+	help
+	  Enable integration with opencode processes. The AI
+	  manager will detect and prioritise opencode AI tasks.
+
+config AI_SYSFS
+	bool "AI subsystem sysfs interface"
+	default y
+	help
+	  Expose AI subsystem state and controls via sysfs at
+	  /sys/kernel/ai/.
+
+endif

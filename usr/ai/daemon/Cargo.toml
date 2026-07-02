@@ -1,0 +1,24 @@
+[package]
+name = "ai-mgr"
+version = "0.1.0"
+edition = "2021"
+description = "AI Manager Daemon — userspace component of the kernel AI subsystem"
+
+[dependencies]
+libc = "0.2"
+ctrlc = "3.4"
+
+# Optional integrations
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+reqwest = { version = "0.12", features = ["json"], optional = true }
+
+[features]
+default = []
+ollama = ["serde", "serde_json", "reqwest"]
+opencode = ["serde", "serde_json"]
+cloud = ["serde", "serde_json", "reqwest"]
+
+[[bin]]
+name = "ai-mgr"
+path = "src/main.rs"

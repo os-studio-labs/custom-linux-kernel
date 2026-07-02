@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Rust Driver Core — safe wrappers for any driver subsystem
+
+config RUST_CORE
+	tristate "Rust Driver Core — safe DMA/PCI/devres wrappers"
+	depends on RUST
+	help
+	  Universal Rust safety layer for all driver subsystems.
+	  Provides RAII-style DMA mappings, bounds-checked PCI config
+	  access, automatic devres cleanup, and safe MMIO operations.
+	  Any Linux driver (GPU, storage, net, USB, audio, etc.) can
+	  link against this module to eliminate entire classes of
+	  memory-safety and resource-leak bugs.
+
+	  When in doubt, say M.
+
+config RUST_CORE_DMA
+	bool "Safe DMA mapping wrappers"
+	depends on RUST_CORE
+	default y
+	help
+	  RAII DMA mappings that record device, direction, and length
+	  so that unmapping is always correct.  Prevents the most
+	  common class of DMA bugs.
+
+config RUST_CORE_PCI
+	bool "Safe PCI config space access"
+	depends on RUST_CORE && PCI
+	default y
+	help
+	  Bounds-checked PCI configuration space access.
+	  Eliminates out-of-bounds config space reads/writes.
+
+config RUST_CORE_DEVRES
+	bool "Safe devres (device-managed resource) tracking"
+	depends on RUST_CORE
+	default y
+	help
+	  Automatic cleanup for driver resources via the kernel's
+	  devres framework, with Rust-level type safety.

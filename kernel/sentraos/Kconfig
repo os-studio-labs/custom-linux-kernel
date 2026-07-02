@@ -1,0 +1,137 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# SentraOS Kernel Microkernel Transformation
+
+config SENTRAOS
+	bool "SentraOS Microkernel Architecture"
+	depends on RUST
+	help
+	  Transforms Linux from a monolithic kernel to a microkernel-like
+	  architecture with:
+	    - Invisible monitoring daemon (stealth crash prevention)
+	    - Primary + Backup orchestrator controllers
+	    - Per-driver isolated address spaces (via sandbox page tables)
+	    - IOMMU-enforced DMA isolation for all drivers
+	    - User-space bridge for out-of-Ring-0 subsystem migration
+	    - Lock ordering enforcement + deadlock prevention
+	    - Race condition detection
+	    - Automatic crash containment and recovery
+
+	  This is the foundation for running drivers, filesystems, and
+	  network stacks in isolated environments.
+
+	  If unsure, say N.
+
+config SENTRAOS_STEALTH
+	bool "SentraOS: Invisible monitoring daemon"
+	depends on SENTRAOS
+	help
+	  The monitor hides itself from /sys/module/, /proc/modules,
+	  lsmod, kallsyms, and all kernel tracking.  It uses a hidden
+	  memory pool and cannot be rmmod'd.
+
+config SENTRAOS_ORCHESTRATOR
+	bool "SentraOS: Primary + Backup orchestrator"
+	depends on SENTRAOS
+	help
+	  Dual-controller orchestration with automatic failover.  The
+	  backup shadows the primary's state transparently and takes
+	  over within 100ms if the primary fails.
+
+config SENTRAOS_ISOLATION
+	bool "SentraOS: Driver isolation (sandbox page tables)"
+	depends on SENTRAOS
+	select IOMMU_API
+	help
+	  Each PCI driver runs in its own address space with
+	  IOMMU-restricted DMA.  A driver crash is contained and
+	  cannot bring down the kernel.
+
+config SENTRAOS_CONCURRENCY
+	bool "SentraOS: Lock ordering + race detection"
+	depends on SENTRAOS
+	help
+	  Enforces lock ordering rules, detects potential deadlocks
+	  before they happen, and tracks concurrent read/write access
+	  to detect races.
+
+config SENTRAOS_USER_BRIDGE
+	bool "SentraOS: User-space subsystem bridge"
+	depends on SENTRAOS
+	help
+	  Provides /dev/sentraos_bridge for communicating with
+	  user-space daemons that handle filesystem, network, and
+	  driver operations outside Ring 0.
+
+config SENTRAOS_OBJECT_MANAGER
+	bool "SentraOS: NT-style Object Manager"
+	depends on SENTRAOS
+	help
+	  Windows NT-inspired unified object management subsystem.
+	  All kernel entities (processes, threads, ports, endpoints,
+	  events, files, devices) are managed as reference-counted
+	  objects with:
+	    - Hierarchical namespace (directory tree)
+	    - Per-object security / access control
+	    - Handle table with duplication and access checks
+	    - Type descriptors with per-type operations
+
+	  This is a required dependency for Mach IPC and Microkit
+	  Channels.
+
+config SENTRAOS_IPC
+	bool "SentraOS: Mach-style port-based IPC"
+	depends on SENTRAOS_OBJECT_MANAGER
+	help
+	  Mach microkernel-inspired port-based message passing:
+	    - Port allocation / deallocation
+	    - Message send / receive with timeouts
+	    - Port rights (send, receive, send-once)
+	    - Port sets for multiplexed receive
+	    - Message queues with backpressure
+
+	  Ports are first-class Object Manager objects.
+
+config SENTRAOS_CHANNELS
+	bool "SentraOS: seL4-style microkernel channels"
+	depends on SENTRAOS_OBJECT_MANAGER
+	help
+	  seL4-inspired microkernel IPC primitives:
+	    - Endpoints for synchronous IPC (call / wait / reply)
+	    - Notifications for asynchronous event signaling
+	    - Capability-based access control with grant / revoke
+	    - Word-register message passing (fast, fixed-size)
+
+	  Endpoints and notifications are first-class Object
+	  Manager objects.
+
+config SENTRAOS_OTA
+	bool "SentraOS: OTA Update Manager"
+	depends on SENTRAOS
+	depends on SYSTEM_DATA_VERIFICATION
+	depends on CRYPTO_SHA256
+	help
+	  Local OTA (over-the-air) update subsystem with staged
+	  lifecycle and cryptographic verification:
+	    - Stage → Apply → Rollback workflow
+	    - SHA-256 payload integrity verification
+	    - PKCS#7 signature verification against trusted keyring
+	    - Multiple update types: hotpatch, module, kernel, config,
+	      firmware
+	    - No server connections — all operations are local
+
+	  Updates are verified before staging.  The signature covers
+	  the full update descriptor (header + metadata + payload).
+
+	  If unsure, say N.
+
+config SENTRAOS_OTA_STRICT_SIGN
+	bool "SentraOS: Require all OTA updates to be signed"
+	depends on SENTRAOS_OTA
+	default y
+	help
+	  When set, every staged update must carry a valid PKCS#7
+	  signature.  Unsigned update payloads are rejected.
+	  This provides defence-in-depth against tampered payloads.
+
+	  If unsure, say Y.

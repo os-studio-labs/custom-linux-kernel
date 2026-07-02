@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: GPL-2.0
+
+config SENTRAOS_RUSTCORE
+	bool "SentraOS Rust Core — rewrite kernel core in Rust"
+	depends on RUST
+	help
+	  Replaces legacy C kernel subsystems with modern Rust implementations:
+	    - panic handler (detailed box-art explanations)
+	    - scheduler (EEVDF, lockless per-CPU runqueues)
+	    - process manager (fork/exit/signal with sandbox tracking)
+	    - boot logger (structured startup/shutdown output)
+	    - calls dispatch (modern syscall replacement)
+	    - VFS (capability-based FD passing)
+	    - memory manager (per-sandbox budgets, lockless allocator)
+
+	  These modules compile alongside the existing C code.  The C code
+	  is bypassed at runtime when the Rust version is loaded.
+
+	  If unsure, say N.
+
+config SENTRAOS_OOM_RUST
+	bool "SentraOS OOM Killer — ML-like context-aware scoring"
+	depends on SENTRAOS_RUSTCORE
+	help
+	  Replaces the legacy OOM killer heuristic (mm/oom_kill.c) with a
+	  15-factor weighted scoring model that considers sandbox priority,
+	  cgroup context, interactivity, memory growth rate, CPU time,
+	  DMA allocations, and more.  Provides OOM immunity to prevent
+	  repeated killing of the same process, per-sandbox OOM priorities,
+	  and full decision logging.
+
+	  If unsure, say N.
+
+config SENTRAOS_SIGNAL_RUST
+	bool "SentraOS Signal Manager — race-free, thread-aware signals"
+	depends on SENTRAOS_RUSTCORE
+	help
+	  Replaces the legacy kernel/signal.c delivery path (~4900 lines)
+	  with a clean design:
+	    - Lockless pending queues (atomic bitmask per thread)
+	    - Thread-aware delivery (target specific thread or whole group)
+	    - Async-safe exit handling (no use-after-free races)
+	    - No raw sigset_t manipulation — safe atomic operations
+	    - Per-sandbox signal accounting
+
+	  Key entry points (do_send_sig_info, force_sig_info_to_task,
+	  dequeue_signal, flush_signals) redirect to the Rust manager
+	  when this is enabled.  The legacy C code remains untouched.
+
+	  If unsure, say N.

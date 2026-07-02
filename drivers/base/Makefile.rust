@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Rust integration for driver model
+
+# Rust driver framework
+$(obj)/rust_driver.o: $(src)/rust_driver.rs FORCE
+	$(call if_changed_dep,rustc_library)

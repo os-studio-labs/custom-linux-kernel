@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Driver API Centre (DAC) configuration
+
+config DRIVER_API_CENTRE
+	bool "Driver API Centre — sandbox and validate all drivers"
+	depends on RUST
+	select FW_HEALTH
+	help
+	  The Driver API Centre (DAC) provides:
+	    - Per-driver sandboxing with fault isolation and recovery
+	    - API key validation for every kernel call a driver makes
+	    - Unified per-driver ring-buffer logging via sysfs
+	    - Crash detection via fw_health heartbeat monitoring
+	    - Transparent wrapping of all existing drivers (no source changes)
+
+	  When a driver crashes, DAC prevents it from making further API
+	  calls, logs the fault, and can trigger automatic recovery.
+
+	  If unsure, say N.
+
+config DAC_DEBUG
+	bool "DAC debugging — log every API call"
+	depends on DRIVER_API_CENTRE
+	help
+	  Logs every API call through the DAC gateway.  Very verbose.
+
+config DAC_LEGACY_RTLWIFI
+	bool "Rewrite Realtek rtlwifi in Rust with native DAC API"
+	depends on DRIVER_API_CENTRE
+	help
+	  Replaces the legacy C rtlwifi driver (508K lines, highest
+	  crash rate) with a Rust implementation using DAC for all
+	  DMA/PCI/MMIO/log calls.

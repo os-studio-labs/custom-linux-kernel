@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Firmware health monitoring framework for wireless drivers
+
+config FW_HEALTH
+	tristate "Firmware health monitoring and recovery framework"
+	depends on RUST
+	help
+	  Lockless firmware health monitor for wireless drivers.
+	  Provides automatic crash detection, recovery triggering,
+	  and diagnostic logging.  All wireless drivers can
+	  optionally link against this module.
+
+	  When in doubt, say M.

@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Rust integration for MM components
+
+# Rust slab allocator wrappers
+$(obj)/rust_slab.o: $(src)/rust_slab.rs FORCE
+	$(call if_changed_dep,rustc_library)
+
+# Rust allocation policy module
+$(obj)/rust_alloc_policy.o: $(src)/rust_alloc_policy.rs FORCE
+	$(call if_changed_dep,rustc_library)
+

@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Rust integration for scheduler components
+#
+# These rules compile Rust sources as part of the kernel build.
+# They follow the pattern established in rust/Makefile.
+
+# EEVDF Rust implementation
+$(obj)/rust_eevdf.o: $(src)/rust_eevdf.rs FORCE
+	$(call if_changed_dep,rustc_library)
+
+# Energy Model Rust implementation
+$(obj)/energy_model_rust.o: $(src)/energy_model_rust.rs FORCE
+	$(call if_changed_dep,rustc_library)
