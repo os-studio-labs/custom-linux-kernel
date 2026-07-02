@@ -1,4 +1,4 @@
-#
+#//LINUX-KERNEL FILE, NOT APPLICABLE FOR MODIFIED KERNEL/THIS REPO
 # This list is used by git-shortlog to fix a few botched name translations
 # in the git archive, either because the author's full name was messed up
 # and/or not always written the same way, making contributions from the
