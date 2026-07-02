@@ -12,6 +12,10 @@ The goal of the SentraOS Kernel is to provide a robust foundation for
 developers, students, and daily users while laying groundwork for a
 microkernel-inspired architecture within the Linux ecosystem.
 
+--
+
+Curruntly, the kernel has not been tested and build fails midway. Error resolving underway
+--
 ## Quick Start
 
 * Get the source: <https://github.com/os-studio-labs/custom-linux-kernel>
