@@ -166,3 +166,6 @@ INFORMATION: THIS REPO CONTAINS FILES FROM THE OFFICIAL LINUX KERNEL
 
 This kernel is under active development and may not build successfully.
 Do not use in production environments.
+
+Use at your own risk. The authors are not responsible for any damage,
+data loss, or system failure resulting from the use of this software.
