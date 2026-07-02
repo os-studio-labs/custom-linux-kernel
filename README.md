@@ -158,3 +158,4 @@ All contributions must include:
 * Email: <error40404.github@gmail.com>
 * Issue Tracker: SEE ISSUES
 * Documentation: EXPLORE SOURCE CODE
+INFORMATION: THIS REPO CONTAINS FILES FROM THE OFFICIAL LINUX KERNEL
