@@ -23,6 +23,4 @@ All contributions to the Linux Kernel are subject to this COPYING file.
 
 **SENTRAOS-KERNEL (MODIFIED LINUX KERNEL):**
 
-Is provided under the Apache License 2.0
-
-Please consult the license website (https://www.apache.org/licenses/LICENSE-2.0) for license information. 
+Is provided under the same licensing as the linux kernel.
