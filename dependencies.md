@@ -1,3 +1,5 @@
+//LINUX KERNEL MAPPING, NOT FOR REFERENCE WITH THE MODIFIED KERNEL. PLANS MAY BE INCONSISTENT
+
 # Complete Linux Kernel Dependency Map
 
 ## 1. Subsystem Classification & Dependency Graph
