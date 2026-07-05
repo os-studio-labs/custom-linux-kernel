@@ -156,6 +156,7 @@ All contributions must include:
 # Communication and Support
 
 * Email: <error40404.github@gmail.com>
+* support: <support.harinarayanantr.github@gmail.com>
 * Issue Tracker: SEE ISSUES
 * Documentation: EXPLORE SOURCE CODE
 INFORMATION: THIS REPO CONTAINS FILES FROM THE OFFICIAL LINUX KERNEL
